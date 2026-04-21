@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="theme-color" content="#1a0a2e"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Valigia di Enrica"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
+<title>La valigia di Enrica</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#100a1f;--bg2:#1a1030;--bg3:#160d28;
+  --card:#1e1338;--card2:#261840;--card3:#2e1f4a;
+  --p1:#ff7eb3;--p2:#a78bfa;--p3:#34d399;--p4:#fbbf24;--p5:#60a5fa;--p6:#f87171;
+  --text:#f5f0ff;--text2:#b8afd0;--text3:#6e6488;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --r:18px;--rs:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overscroll-behavior:none}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;max-width:480px;margin:0 auto;overflow-x:hidden}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;gap:14px;transition:opacity 0.6s}
+#splash.hide{opacity:0;pointer-events:none}
+.sb{position:absolute;border-radius:50%;filter:blur(70px);opacity:0.3}
+.sb1{width:300px;height:300px;background:var(--p1);top:-80px;left:-80px;animation:p1 4s ease-in-out infinite}
+.sb2{width:260px;height:260px;background:var(--p2);bottom:-60px;right:-60px;animation:p2 5s ease-in-out infinite}
+.sb3{width:200px;height:200px;background:var(--p3);bottom:35%;left:15%;animation:p1 6s ease-in-out infinite}
+@keyframes p1{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+@keyframes p2{0%,100%{transform:scale(1.1)}50%{transform:scale(0.9)}}
+.splash-c{position:relative;text-align:center}
+.splash-icon{font-size:64px;display:block;margin-bottom:14px;animation:flt 2.5s ease-in-out infinite}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.splash-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--text);line-height:1.2}
+.splash-title em{color:var(--p1);font-style:italic}
+.splash-sub{font-size:12px;color:var(--text3);margin-top:6px}
+
+/* HEADER */
+.hdr{padding:16px 20px 4px;display:flex;align-items:flex-start;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:19px;color:var(--text);line-height:1.3}
+.logo em{color:var(--p1);font-style:italic}
+.hdr-r{text-align:right}
+.hdr-dest{font-size:13px;color:var(--p4);font-weight:500}
+.hdr-meta{font-size:11px;color:var(--text3)}
+
+/* TABS */
+.tw{position:sticky;top:60px;background:var(--bg);z-index:99;padding:8px 20px 0}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:7px 13px;border-radius:99px;font-size:12px;font-weight:500;border:1.5px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.tab.t0.active{background:var(--p2);color:#fff;border-color:var(--p2)}
+.tab.t1.active{background:var(--p1);color:#1a001a;border-color:var(--p1)}
+.tab.t2.active{background:#818cf8;color:#fff;border-color:#818cf8}
+.tab.t3.active{background:var(--p3);color:#001a0e;border-color:var(--p3)}
+.tab.t4.active{background:var(--p4);color:#1a0f00;border-color:var(--p4)}
+.tab.t5.active{background:var(--p5);color:#00102a;border-color:var(--p5)}
+
+/* CONTENT */
+.content{padding:14px 18px 130px}
+.section{display:none}.section.active{display:block}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+/* FORM */
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.07em}
+.field input,.field select{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--rs);padding:10px 12px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;-webkit-appearance:none}
+.field input:focus,.field select:focus{border-color:var(--p2)}
+.field select option{background:var(--bg3)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.stat{border-radius:var(--rs);padding:14px;text-align:center}
+.stat-n{font-family:'Playfair Display',serif;font-size:28px}
+.stat-l{font-size:11px;color:var(--text3);margin-top:2px}
+.s0{background:linear-gradient(135deg,#2d1060,#1e0840)}.s0 .stat-n{color:var(--p2)}
+.s1{background:linear-gradient(135deg,#3d0030,#1e0020)}.s1 .stat-n{color:var(--p1)}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:14px}
+.prog-track{background:var(--bg3);border-radius:99px;height:5px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--p1),var(--p2),var(--p5));transition:width 0.4s}
+.prog-lbl{font-size:12px;color:var(--text3);margin-top:5px}
+
+/* ITEMS */
+.item-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.item-row:last-child{border-bottom:none}
+.chk{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border2);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.chk.on{background:var(--p1);border-color:var(--p1)}
+.chk.on::after{content:'✓';font-size:11px;color:#1a0010;font-weight:700}
+.iname{flex:1;font-size:14px;color:var(--text);transition:color 0.15s}
+.iname.done{text-decoration:line-through;color:var(--text3)}
+.iqty{font-size:11px;background:var(--bg3);color:var(--text3);padding:2px 7px;border-radius:99px;white-space:nowrap}
+.bdel{background:none;border:none;color:var(--text3);cursor:pointer;font-size:19px;padding:0 2px;line-height:1}
+
+/* ADD ROW */
+.add-row{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.add-row input,.add-row select{flex:1 1 120px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--rs);padding:9px 11px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;-webkit-appearance:none;min-width:0}
+.add-row input:focus,.add-row select:focus{border-color:var(--p2)}
+.add-row select option{background:var(--bg3)}
+.badd{flex-shrink:0;padding:9px 15px;border:none;border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:opacity 0.15s}
+.badd:active{opacity:0.8}
+.bpink{background:var(--p1);color:#1a001a}
+.bviolet{background:var(--p2);color:#fff}
+.bmint{background:var(--p3);color:#001a0e}
+.byellow{background:var(--p4);color:#1a0f00}
+.bblue{background:var(--p5);color:#fff}
+
+/* DAYS */
+.day-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.day-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;background:var(--card2)}
+.day-t{font-size:14px;font-weight:500;color:var(--text)}
+.day-m{font-size:12px;color:var(--text3)}
+.day-arr{color:var(--text3);font-size:18px;transition:transform 0.2s}
+.day-arr.open{transform:rotate(90deg)}
+.day-body{padding:14px 16px;display:none}
+.day-body.open{display:block}
+
+/* OUTFIT BLOCK */
+.oblock{background:var(--card2);border:1px solid var(--border2);border-radius:var(--rs);padding:12px;margin-bottom:10px}
+.oblock:last-of-type{margin-bottom:0}
+.otop{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+
+/* PHOTO BOX — zona cliccabile per foto principale */
+.photo-box{width:76px;height:76px;border-radius:10px;border:1.5px dashed var(--border2);background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;position:relative;cursor:pointer;transition:border-color 0.2s}
+.photo-box:hover{border-color:var(--p1)}
+.photo-box img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:9px}
+.photo-hint{font-size:22px;line-height:1;color:var(--text3)}
+.photo-lbl{font-size:9px;color:var(--text3);margin-top:3px;text-align:center}
+.photo-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* MINI PHOTOS STRIP */
+.photos-strip{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.mini-ph{width:52px;height:52px;border-radius:8px;object-fit:cover;border:1px solid var(--border2)}
+.add-mini{width:52px;height:52px;border-radius:8px;border:1.5px dashed var(--border2);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--text3);position:relative;overflow:hidden;flex-shrink:0;cursor:pointer}
+.add-mini input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.del-photo{position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);border:none;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;cursor:pointer;z-index:2}
+
+.oinfo{flex:1;min-width:0}
+.oname{font-size:14px;font-weight:500;color:var(--text);margin-bottom:5px}
+.otags{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:11px;padding:3px 9px;border-radius:99px}
+.tc{background:rgba(96,165,250,0.15);color:#93c5fd}
+.te{background:rgba(167,139,250,0.15);color:#c4b5fd}
+.ts{background:rgba(52,211,153,0.15);color:#6ee7b7}
+.tm{background:rgba(56,189,248,0.15);color:#7dd3fc}
+.tse{background:rgba(255,126,179,0.15);color:var(--p1)}
+.tn{background:rgba(255,255,255,0.07);color:var(--text2)}
+.odel{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;padding:0;line-height:1;flex-shrink:0}
+
+/* ADD OUTFIT FORM */
+.ao-form{background:var(--bg3);border-radius:var(--rs);padding:12px;margin-top:10px;border:1px solid var(--border)}
+.ao-form .add-row{margin-top:0}
+
+/* CAT LABEL */
+.cat-lbl{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin:14px 0 7px}
+.cat-lbl:first-child{margin-top:0}
+
+/* SECTION BADGE */
+.sbadge{font-size:11px;padding:3px 9px;border-radius:99px;margin-left:auto}
+.sbp{background:rgba(255,126,179,0.15);color:var(--p1)}
+.sbv{background:rgba(167,139,250,0.15);color:var(--p2)}
+.sbg{background:rgba(52,211,153,0.15);color:var(--p3)}
+.sby{background:rgba(251,191,36,0.15);color:var(--p4)}
+.sbb{background:rgba(96,165,250,0.15);color:var(--p5)}
+
+/* TIPS */
+.tip{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.5}
+.tip:last-child{border-bottom:none}
+.tip-dot{color:var(--p1);flex-shrink:0}
+
+/* GEN BTN */
+.gen-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--p1),var(--p2));border:none;border-radius:var(--rs);color:#fff;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:14px;transition:opacity 0.15s}
+.gen-btn:active{opacity:0.85}
+
+/* EMPTY */
+.empty{text-align:center;padding:28px 16px;color:var(--text3);font-size:13px;line-height:1.8}
+.empty-icon{font-size:34px;margin-bottom:8px}
+
+/* TOAST */
+#toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--card3);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:99px;font-size:13px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:500;white-space:nowrap}
+#toast.show{opacity:1}
+
+/* INSTALL */
+#ib{display:none;margin:0 0 12px;background:var(--card2);border:1px solid var(--border2);border-radius:var(--rs);padding:12px 14px;align-items:center;gap:10px}
+#ib.show{display:flex}
+.ibt{flex:1;font-size:13px;color:var(--text2);line-height:1.4}
+.ibt strong{display:block;color:var(--text);margin-bottom:2px}
+
+/* COLOR HEADINGS */
+.ch-pink{color:var(--p1)}.ch-violet{color:var(--p2)}.ch-mint{color:var(--p3)}.ch-yellow{color:var(--p4)}.ch-blue{color:var(--p5)}
+
+/* MATCH TAB */
+.tab.t6.active{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;border-color:var(--p1)}
+
+/* WARDROBE GRID */
+.wcard{border-radius:var(--rs);overflow:hidden;position:relative;cursor:pointer;aspect-ratio:1;border:2.5px solid transparent;transition:all 0.2s;background:var(--card2)}
+.wcard.sel{border-color:var(--p1);box-shadow:0 0 0 3px rgba(255,126,179,0.25)}
+.wcard img{width:100%;height:100%;object-fit:cover;display:block}
+.wcard-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.75));padding:6px 6px 5px;font-size:10px;color:#fff;line-height:1.3}
+.wcard-name{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wcard-day{font-size:9px;color:rgba(255,255,255,0.6)}
+.wcard-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;background:var(--card2);border-radius:var(--rs);border:1.5px dashed var(--border2);color:var(--text3);font-size:11px;gap:4px}
+.wcard-sel-badge{position:absolute;top:5px;right:5px;background:var(--p1);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#1a0010;font-weight:700}
+.wcard-no-photo{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:22px;color:var(--text3);gap:4px;background:var(--card2)}
+.wcard-no-photo span{font-size:10px;color:var(--text3)}
+
+/* MATCH SLOT */
+.mslot{width:72px;height:72px;border-radius:10px;overflow:hidden;position:relative;flex-shrink:0}
+.mslot img{width:100%;height:100%;object-fit:cover}
+.mslot-label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);font-size:9px;color:#fff;padding:3px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mslot-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);border:none;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;cursor:pointer}
+.mslot-empty{width:72px;height:72px;border-radius:10px;border:1.5px dashed var(--border2);background:var(--bg3);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:var(--text3);gap:2px}
+
+/* SAVED MATCH CARD */
+.smatch{background:var(--card2);border:1px solid var(--border2);border-radius:var(--rs);padding:12px;margin-bottom:10px}
+.smatch-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.smatch-photos{display:flex;gap:7px;flex-wrap:wrap}
+.smatch-ph{width:56px;height:56px;border-radius:8px;object-fit:cover;border:1px solid var(--border2)}
+.smatch-noph{width:56px;height:56px;border-radius:8px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px}
+/* METEO TAB */
+.tab.t7.active{background:linear-gradient(135deg,#0ea5e9,var(--p3));color:#fff;border-color:#0ea5e9}
+
+/* METEO */
+.meteo-hero{border-radius:var(--r);padding:20px;margin-bottom:12px;text-align:center;position:relative;overflow:hidden}
+.meteo-city{font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:2px}
+.meteo-dates{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:16px}
+.meteo-icon-big{font-size:56px;line-height:1;margin-bottom:8px;display:block}
+.meteo-temp-big{font-family:'Playfair Display',serif;font-size:48px;color:#fff;line-height:1}
+.meteo-desc{font-size:14px;color:rgba(255,255,255,0.8);margin-top:4px}
+.meteo-range{font-size:13px;color:rgba(255,255,255,0.6);margin-top:2px}
+
+.meteo-days{display:grid;gap:8px;margin-bottom:12px}
+.meteo-day-row{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:12px}
+.meteo-day-row.today{border-color:rgba(14,165,233,0.4);background:linear-gradient(135deg,rgba(14,165,233,0.08),rgba(52,211,153,0.05))}
+.meteo-day-label{font-size:13px;font-weight:500;color:var(--text);width:60px;flex-shrink:0}
+.meteo-day-icon{font-size:22px;width:30px;text-align:center;flex-shrink:0}
+.meteo-day-desc{flex:1;font-size:12px;color:var(--text2)}
+.meteo-day-temps{text-align:right;flex-shrink:0}
+.meteo-day-max{font-size:15px;font-weight:500;color:var(--text)}
+.meteo-day-min{font-size:12px;color:var(--text3)}
+.meteo-day-prec{font-size:11px;color:#60a5fa;margin-top:1px}
+
+.meteo-extras{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.meteo-extra{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center}
+.meteo-extra-val{font-size:18px;font-weight:500;color:var(--text);margin-top:4px}
+.meteo-extra-lbl{font-size:11px;color:var(--text3);margin-top:2px}
+.meteo-extra-icon{font-size:18px}
+
+.meteo-tips{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:14px;margin-bottom:12px}
+.meteo-tip{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.4}
+.meteo-tip:last-child{border-bottom:none}
+.meteo-tip-icon{flex-shrink:0;font-size:16px}
+
+.meteo-search{display:flex;gap:8px;margin-bottom:12px}
+.meteo-search input{flex:1;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--rs);padding:10px 12px;font-size:14px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none}
+.meteo-search input:focus{border-color:#0ea5e9}
+.meteo-loading{text-align:center;padding:32px;color:var(--text3);font-size:13px}
+.meteo-loading-icon{font-size:36px;animation:spin 1.5s linear infinite;display:block;margin-bottom:10px}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.meteo-error{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:var(--rs);padding:14px;text-align:center;font-size:13px;color:#fca5a5;margin-bottom:12px}
+.meteo-source{font-size:11px;color:var(--text3);text-align:center;padding:8px 0}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div style="position:absolute;inset:0;overflow:hidden">
+    <div class="sb sb1"></div><div class="sb sb2"></div><div class="sb sb3"></div>
+  </div>
+  <div class="splash-c">
+    <span class="splash-icon">🧳</span>
+    <div class="splash-title">La valigia di <em>Enrica</em></div>
+    <div class="splash-sub">caricamento in corso...</div>
+  </div>
+</div>
+
+<div id="ib">
+  <div class="ibt"><strong>Installa l'app</strong>Aggiungila alla home per usarla offline</div>
+  <button class="badd bpink" style="padding:7px 12px;font-size:12px" onclick="installApp()">Installa</button>
+  <button class="bdel" onclick="document.getElementById('ib').classList.remove('show')">×</button>
+</div>
+
+<div class="hdr">
+  <div class="logo">La valigia di <em>Enrica</em></div>
+  <div class="hdr-r">
+    <div class="hdr-dest" id="hdest">nessun viaggio</div>
+    <div class="hdr-meta" id="hmeta"></div>
+  </div>
+</div>
+
+<div class="tw">
+  <div class="tabs">
+    <button class="tab t0 active" onclick="sw('setup',0)">✦ Viaggio</button>
+    <button class="tab t1" onclick="sw('outfit',1)">👗 Outfit</button>
+    <button class="tab t2" onclick="sw('notte',2)">🌙 Notte</button>
+    <button class="tab t3" onclick="sw('bagno',3)">🚿 Bagno</button>
+    <button class="tab t4" onclick="sw('necessita',4)">📋 Necessità</button>
+    <button class="tab t5" onclick="sw('packing',5)">✓ Lista</button>
+    <button class="tab t6" onclick="sw('match',6)">✨ Match</button>
+    <button class="tab t7" onclick="sw('meteo',7)">🌤 Meteo</button>
+  </div>
+</div>
+
+<div class="content">
+
+<div id="setup" class="section active">
+  <div class="card">
+    <div class="field"><label>Destinazione</label><input type="text" id="dest" placeholder="es. Barcellona, Parigi, Sicilia..." oninput="saveSetup()"/></div>
+    <div class="field-row">
+      <div class="field"><label>Tipo</label>
+        <select id="tripType" onchange="saveSetup()">
+          <option value="city">City break</option><option value="mare">Mare</option>
+          <option value="montagna">Montagna</option><option value="lavoro">Lavoro</option><option value="misto">Misto</option>
+        </select>
+      </div>
+      <div class="field"><label>Durata</label>
+        <div style="background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--rs);padding:10px 12px;font-size:16px;color:var(--p1);font-family:'Playfair Display',serif" id="dcount">—</div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Partenza</label><input type="date" id="sd" oninput="buildDays()"/></div>
+      <div class="field"><label>Ritorno</label><input type="date" id="ed" oninput="buildDays()"/></div>
+    </div>
+  </div>
+  <div class="stats" id="sgrid" style="display:none">
+    <div class="stat s0"><div class="stat-n" id="sOut">0</div><div class="stat-l">outfit pianificati</div></div>
+    <div class="stat s1"><div class="stat-n" id="sPct">0%</div><div class="stat-l">packing completato</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title ch-pink">✦ Consigli per il viaggio</div>
+    <div id="tips"><div class="tip"><span class="tip-dot">→</span><span>Inserisci le date per ricevere consigli personalizzati</span></div></div>
+  </div>
+</div>
+
+<div id="outfit" class="section">
+  <div id="dgrid"><div class="empty"><div class="empty-icon">📅</div>Inserisci le date nel tab Viaggio per pianificare gli outfit</div></div>
+</div>
+
+<div id="notte" class="section">
+  <div class="card">
+    <div class="card-title ch-violet">🌙 Reparto notte<span class="sbadge sbv" id="ncount">0/0</span></div>
+    <div id="nitems"></div>
+    <div class="add-row">
+      <input type="text" id="nnew" placeholder="Aggiungi elemento..." onkeydown="if(event.key==='Enter')addCI('notte')"/>
+      <button class="badd bviolet" onclick="addCI('notte')">+ Aggiungi</button>
+    </div>
+  </div>
+</div>
+
+<div id="bagno" class="section">
+  <div class="card">
+    <div class="card-title ch-mint">🚿 Reparto bagno<span class="sbadge sbg" id="bcount">0/0</span></div>
+    <div id="bitems"></div>
+    <div class="add-row">
+      <input type="text" id="bnew" placeholder="Aggiungi prodotto..." onkeydown="if(event.key==='Enter')addCI('bagno')"/>
+      <button class="badd bmint" onclick="addCI('bagno')">+ Aggiungi</button>
+    </div>
+  </div>
+</div>
+
+<div id="necessita" class="section">
+  <div class="card">
+    <div class="card-title ch-yellow">📋 Necessità<span class="sbadge sby" id="neccount">0/0</span></div>
+    <div id="necitems"></div>
+    <div class="add-row">
+      <input type="text" id="necnew" placeholder="Aggiungi elemento..." onkeydown="if(event.key==='Enter')addNec()"/>
+      <select id="neccat">
+        <option value="Documenti">Documenti</option><option value="Salute">Salute</option>
+        <option value="Elettronica">Elettronica</option><option value="Soldi">Soldi / carte</option><option value="Altro">Altro</option>
+      </select>
+      <button class="badd byellow" onclick="addNec()">+ Aggiungi</button>
+    </div>
+  </div>
+</div>
+
+<div id="packing" class="section">
+  <button class="gen-btn" onclick="genAll()">✨ Genera lista da outfit</button>
+  <div class="card">
+    <div class="prog-wrap">
+      <div class="prog-track"><div class="prog-fill" id="pprog" style="width:0%"></div></div>
+      <div class="prog-lbl" id="plbl">0 di 0 oggetti pronti</div>
+    </div>
+  </div>
+  <div id="pcont"><div class="empty"><div class="empty-icon">📝</div>Compila le sezioni e genera la lista</div></div>
+</div>
+
+<!-- MATCH -->
+<div id="match" class="section">
+  <div class="card" style="background:linear-gradient(135deg,#2a0d4a,#1a0830);border-color:rgba(167,139,250,0.2)">
+    <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:4px">Crea il tuo look ✨</div>
+    <div style="font-size:12px;color:var(--text3)">Seleziona i capi per comporre un outfit</div>
+  </div>
+
+  <!-- MATCH BOARD -->
+  <div id="match-board" style="display:none">
+    <div class="card" style="border-color:rgba(255,126,179,0.2)">
+      <div style="font-size:12px;color:var(--text3);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.07em">Il tuo look</div>
+      <div id="match-slots" style="display:flex;gap:10px;flex-wrap:wrap;min-height:90px;align-items:center"></div>
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+        <input type="text" id="match-name" placeholder="Dai un nome al look..." style="flex:1;background:var(--bg3);border:1.5px solid var(--border2);border-radius:var(--rs);padding:9px 12px;font-size:13px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;min-width:120px"/>
+        <button class="badd bpink" onclick="saveMatch()">💾 Salva look</button>
+        <button class="badd" style="background:var(--bg3);color:var(--text3);border:1.5px solid var(--border2)" onclick="clearMatch()">✕ Svuota</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVED MATCHES -->
+  <div id="saved-matches"></div>
+
+  <!-- GUARDAROBA GRID -->
+  <div class="card">
+    <div class="card-title ch-pink">👗 Guardaroba<span class="sbadge sbp" id="wardrobe-count" style="margin-left:auto">0 capi</span></div>
+    <div id="wardrobe-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
+  </div>
+</div>
+
+<!-- METEO -->
+<div id="meteo" class="section">
+  <div class="meteo-search">
+    <input type="text" id="meteo-city-input" placeholder="Cerca città... es. Barcellona" onkeydown="if(event.key==='Enter')searchMeteo()"/>
+    <button class="badd bblue" onclick="searchMeteo()">🔍 Cerca</button>
+  </div>
+  <div id="meteo-content">
+    <div class="meteo-loading" id="meteo-idle">
+      <span style="font-size:40px;display:block;margin-bottom:10px">🌤</span>
+      Inserisci la tua destinazione<br>per vedere le previsioni del viaggio
+    </div>
+  </div>
+  <div class="meteo-source">Dati: Open-Meteo · fonte ufficiale ECMWF/DWD</div>
+</div>
+
+</div>
+<div id="toast"></div>
+
+<script>
+const DB='valigiaEnrica3';
+let S={
+  dest:'',tripType:'city',startDate:'',endDate:'',
+  days:[],openDays:{},photos:{},
+  notte:[{name:'Pigiama',qty:1,checked:false},{name:'Ciabatte da camera',qty:1,checked:false},{name:'Maschera per dormire',qty:1,checked:false},{name:'Tappi per le orecchie',qty:1,checked:false},{name:'Calzini morbidi',qty:1,checked:false}],
+  bagno:[{name:'Spazzolino',qty:1,checked:false},{name:'Dentifricio',qty:1,checked:false},{name:'Shampoo',qty:1,checked:false},{name:'Balsamo',qty:1,checked:false},{name:'Deodorante',qty:1,checked:false},{name:'Crema viso',qty:1,checked:false},{name:'Struccante',qty:1,checked:false},{name:'Rasoio',qty:1,checked:false},{name:'Pettine/spazzola',qty:1,checked:false},{name:'Profumo',qty:1,checked:false}],
+  necessita:[{name:"Carta d'identità/passaporto",qty:1,checked:false,cat:'Documenti'},{name:'Biglietti/prenotazioni',qty:1,checked:false,cat:'Documenti'},{name:'Assicurazione viaggio',qty:1,checked:false,cat:'Documenti'},{name:'Portafoglio + contanti',qty:1,checked:false,cat:'Soldi / carte'},{name:'Carta di credito',qty:1,checked:false,cat:'Soldi / carte'},{name:'Caricabatterie telefono',qty:1,checked:false,cat:'Elettronica'},{name:'Power bank',qty:1,checked:false,cat:'Elettronica'},{name:'Cuffie',qty:1,checked:false,cat:'Elettronica'},{name:'Antidolorifico',qty:1,checked:false,cat:'Salute'},{name:'Cerotti',qty:1,checked:false,cat:'Salute'}],
+  outfitItems:[],
+  matchSelected:[],
+  savedMatches:[],
+  meteoData:null,
+  meteoCityName:''
+};
+
+const TL={casual:'Casual',elegante:'Elegante',sportivo:'Sportivo',mare:'Mare',sera:'Sera'};
+const TC={casual:'tc',elegante:'te',sportivo:'ts',mare:'tm',sera:'tse'};
+
+function load(){try{const d=localStorage.getItem(DB);if(d)Object.assign(S,JSON.parse(d));}catch(e){}if(!S.photos)S.photos={};if(!S.matchSelected)S.matchSelected=[];if(!S.savedMatches)S.savedMatches=[];}
+function save(){try{localStorage.setItem(DB,JSON.stringify(S));}catch(e){}}
+
+function sw(t,idx){
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',i===idx));
+  document.querySelectorAll('.section').forEach(el=>el.classList.remove('active'));
+  document.getElementById(t).classList.add('active');
+  if(t==='notte')renderSec('notte');
+  if(t==='bagno')renderSec('bagno');
+  if(t==='necessita')renderNec();
+  if(t==='packing')renderPacking();
+  if(t==='match')renderMatch();
+  if(t==='meteo'){
+    const city=S.dest||'';
+    if(city&&!S.meteoData) {
+      document.getElementById('meteo-city-input').value=city;
+      searchMeteo();
+    }
+  }
+}
+
+function saveSetup(){S.dest=document.getElementById('dest').value;S.tripType=document.getElementById('tripType').value;updateHdr();updateTips();save();}
+function updateHdr(){document.getElementById('hdest').textContent=S.dest||'nessun viaggio';document.getElementById('hmeta').textContent=S.days.length?S.days.length+' giorni':'';}
+
+function buildDays(){
+  const s=document.getElementById('sd').value,e=document.getElementById('ed').value;
+  S.startDate=s;S.endDate=e;if(!s||!e)return;
+  const start=new Date(s),end=new Date(e);if(end<start)return;
+  const diff=Math.round((end-start)/864e5)+1;
+  document.getElementById('dcount').textContent=diff+(diff===1?' giorno':' giorni');
+  const prev=S.days;S.days=[];
+  for(let i=0;i<diff;i++){const d=new Date(start);d.setDate(start.getDate()+i);const k=d.toISOString().split('T')[0];const p=prev.find(x=>x.key===k);S.days.push({key:k,label:fmtDay(d,i+1),outfits:p?p.outfits:[]});}
+  renderDays();updateTips();updateStats();save();updateHdr();
+  document.getElementById('sgrid').style.display='grid';
+}
+function fmtDay(d,n){const dw=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'],mn=['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];return`Giorno ${n} · ${dw[d.getDay()]} ${d.getDate()} ${mn[d.getMonth()]}`;}
+
+/* ---- OUTFIT / DAYS ---- */
+function renderDays(){
+  const g=document.getElementById('dgrid');
+  if(!S.days.length){g.innerHTML='<div class="empty"><div class="empty-icon">📅</div>Inserisci le date nel tab Viaggio</div>';return;}
+  g.innerHTML=S.days.map((day,i)=>`
+    <div class="day-card">
+      <div class="day-head" onclick="toggleDay(${i})">
+        <div><div class="day-t">${day.label}</div><div class="day-m">${day.outfits.length?day.outfits.length+' outfit':'nessun outfit'}</div></div>
+        <span class="day-arr ${S.openDays[i]?'open':''}">›</span>
+      </div>
+      <div class="day-body ${S.openDays[i]?'open':''}">
+        ${day.outfits.map((o,j)=>renderOBlock(i,j,o)).join('')}
+        <div class="ao-form">
+          <div class="add-row" style="margin-top:0">
+            <input type="text" id="on${i}" placeholder="Nome outfit, es. look da aperitivo" onkeydown="if(event.key==='Enter')addOutfit(${i})"/>
+            <select id="ot${i}"><option value="casual">Casual</option><option value="elegante">Elegante</option><option value="sportivo">Sportivo</option><option value="mare">Mare</option><option value="sera">Sera</option></select>
+            <button class="badd bpink" onclick="addOutfit(${i})">+ Outfit</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderOBlock(i,j,o){
+  const k=`${i}_${j}`,photos=S.photos[k]||[],main=photos[0]||null;
+  const extras=photos.slice(1);
+  return`<div class="oblock">
+    <div class="otop">
+      <div class="photo-box">
+        ${main?`<img src="${main}" alt=""/>`:`<span class="photo-hint">📷</span><span class="photo-lbl">foto look</span>`}
+        <input type="file" accept="image/*" onchange="handlePhoto(event,${i},${j},0)"/>
+      </div>
+      <div class="oinfo">
+        <div class="oname">${o.name}</div>
+        <div class="otags">
+          <span class="tag ${TC[o.type]||'tn'}">${TL[o.type]||o.type}</span>
+          ${o.items.map(it=>`<span class="tag tn">${it}</span>`).join('')}
+        </div>
+      </div>
+      <button class="odel" onclick="rmOutfit(${i},${j})">×</button>
+    </div>
+    <div class="photos-strip">
+      ${extras.map((p,pi)=>`<div style="position:relative;display:inline-block"><img class="mini-ph" src="${p}" alt=""/><button class="del-photo" onclick="delPhoto(${i},${j},${pi+1})">×</button></div>`).join('')}
+      <div class="add-mini" title="Aggiungi foto">+<input type="file" accept="image/*" onchange="handlePhoto(event,${i},${j},${photos.length})"/></div>
+    </div>
+  </div>`;
+}
+
+function handlePhoto(evt,i,j,idx){
+  const file=evt.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const k=`${i}_${j}`;if(!S.photos[k])S.photos[k]=[];
+    if(idx===0)S.photos[k][0]=e.target.result;
+    else S.photos[k].push(e.target.result);
+    save();renderDays();toast('Foto aggiunta! 📷');
+  };
+  reader.readAsDataURL(file);
+}
+function delPhoto(i,j,idx){const k=`${i}_${j}`;if(S.photos[k])S.photos[k].splice(idx,1);save();renderDays();}
+function toggleDay(i){S.openDays[i]=!S.openDays[i];renderDays();}
+function addOutfit(i){const n=document.getElementById('on'+i).value.trim(),t=document.getElementById('ot'+i).value;if(!n)return;S.days[i].outfits.push({name:n,type:t,items:suggestItems(t)});S.openDays[i]=true;renderDays();updateStats();save();toast('Outfit aggiunto!');}
+function rmOutfit(i,j){delete S.photos[`${i}_${j}`];S.days[i].outfits.splice(j,1);renderDays();updateStats();save();}
+function suggestItems(t){return{casual:['top','jeans','sneakers'],elegante:['abito/blazer','pantaloni','scarpe'],sportivo:['leggings/shorts','t-shirt','scarpe running'],mare:['costume','pareo','infradito'],sera:['vestito sera','tacco','pochette']}[t]||['top','pantaloni','scarpe'];}
+
+/* ---- NOTTE / BAGNO ---- */
+function renderSec(key){
+  const idMap={notte:'nitems',bagno:'bitems'};
+  const badgeMap={notte:'ncount',bagno:'bcount'};
+  const cont=document.getElementById(idMap[key]);
+  const badge=document.getElementById(badgeMap[key]);
+  const done=S[key].filter(x=>x.checked).length;
+  if(badge)badge.textContent=done+'/'+S[key].length;
+  if(!S[key].length){cont.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0">Nessun elemento</div>';return;}
+  cont.innerHTML=S[key].map((it,i)=>`<div class="item-row">
+    <div class="chk ${it.checked?'on':''}" onclick="toggleSec('${key}',${i})"></div>
+    <span class="iname ${it.checked?'done':''}">${it.name}</span>
+    ${it.qty>1?`<span class="iqty">×${it.qty}</span>`:''}
+    <button class="bdel" onclick="rmSec('${key}',${i})">×</button>
+  </div>`).join('');
+}
+function toggleSec(key,i){S[key][i].checked=!S[key][i].checked;renderSec(key);updateStats();save();}
+function rmSec(key,i){S[key].splice(i,1);renderSec(key);updateStats();save();}
+function addCI(key){
+  const idMap={notte:'nnew',bagno:'bnew'};
+  const inp=document.getElementById(idMap[key]),n=inp.value.trim();if(!n)return;
+  S[key].push({name:n,qty:1,checked:false});inp.value='';renderSec(key);updateStats();save();toast('Aggiunto!');
+}
+
+/* ---- NECESSITÀ ---- */
+function renderNec(){
+  const cont=document.getElementById('necitems'),badge=document.getElementById('neccount');
+  const done=S.necessita.filter(x=>x.checked).length;
+  if(badge)badge.textContent=done+'/'+S.necessita.length;
+  if(!S.necessita.length){cont.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0">Nessun elemento</div>';return;}
+  const byCat={};S.necessita.forEach((it,i)=>{if(!byCat[it.cat])byCat[it.cat]=[];byCat[it.cat].push({...it,idx:i});});
+  cont.innerHTML=Object.entries(byCat).map(([cat,items])=>`
+    <div class="cat-lbl">${cat}</div>
+    ${items.map(it=>`<div class="item-row">
+      <div class="chk ${it.checked?'on':''}" onclick="toggleNec(${it.idx})"></div>
+      <span class="iname ${it.checked?'done':''}">${it.name}</span>
+      <button class="bdel" onclick="rmNec(${it.idx})">×</button>
+    </div>`).join('')}`).join('');
+}
+function toggleNec(i){S.necessita[i].checked=!S.necessita[i].checked;renderNec();updateStats();save();}
+function rmNec(i){S.necessita.splice(i,1);renderNec();}
+function addNec(){const n=document.getElementById('necnew').value.trim(),c=document.getElementById('neccat').value;if(!n)return;S.necessita.push({name:n,qty:1,checked:false,cat:c});document.getElementById('necnew').value='';renderNec();save();toast('Aggiunto!');}
+
+/* ---- PACKING ---- */
+function genAll(){
+  S.outfitItems=[];const seen={};
+  S.days.forEach(day=>day.outfits.forEach(o=>o.items.forEach(it=>{seen[it]=(seen[it]||0)+1;})));
+  Object.entries(seen).forEach(([name,qty])=>S.outfitItems.push({name,qty,checked:false}));
+  if(S.tripType==='mare'||S.days.some(d=>d.outfits.some(o=>o.type==='mare'))){if(!S.bagno.find(x=>x.name==='Crema solare'))S.bagno.push({name:'Crema solare',qty:1,checked:false});}
+  save();renderPacking();sw('packing',5);toast('Lista generata! ✨');
+}
+function renderPacking(){
+  const secs=[{key:'outfitItems',label:'👗 Abbigliamento',badge:'sbp'},{key:'notte',label:'🌙 Notte',badge:'sbv'},{key:'bagno',label:'🚿 Bagno',badge:'sbg'},{key:'necessita',label:'📋 Necessità',badge:'sby'}];
+  const cont=document.getElementById('pcont');let html='';
+  secs.forEach(sec=>{
+    const items=S[sec.key];if(!items||!items.length)return;
+    const done=items.filter(x=>x.checked).length;
+    html+=`<div class="card"><div class="card-title">${sec.label}<span class="sbadge ${sec.badge}" style="margin-left:auto">${done}/${items.length}</span></div>`;
+    html+=items.map((it,i)=>`<div class="item-row"><div class="chk ${it.checked?'on':''}" onclick="togglePack('${sec.key}',${i})"></div><span class="iname ${it.checked?'done':''}">${it.name}</span>${it.qty>1?`<span class="iqty">×${it.qty}</span>`:''}</div>`).join('');
+    html+='</div>';
+  });
+  if(!html)html='<div class="empty"><div class="empty-icon">📝</div>Compila le sezioni e clicca "Genera lista"</div>';
+  cont.innerHTML=html;updateProg();
+}
+function togglePack(key,i){
+  if(key==='necessita')S.necessita[i].checked=!S.necessita[i].checked;
+  else S[key][i].checked=!S[key][i].checked;
+  renderPacking();updateStats();save();
+}
+function updateProg(){
+  const all=[...S.outfitItems,...S.notte,...S.bagno,...S.necessita];
+  const tot=all.length,done=all.filter(x=>x.checked).length;
+  const pct=tot?Math.round(done/tot*100):0;
+  document.getElementById('pprog').style.width=pct+'%';
+  document.getElementById('plbl').textContent=done+' di '+tot+' oggetti pronti';
+}
+function updateStats(){
+  document.getElementById('sOut').textContent=S.days.reduce((s,d)=>s+d.outfits.length,0);
+  const all=[...S.outfitItems,...S.notte,...S.bagno,...S.necessita];
+  const pct=all.length?Math.round(all.filter(x=>x.checked).length/all.length*100):0;
+  document.getElementById('sPct').textContent=pct+'%';
+}
+function updateTips(){
+  const tips=[];const t=S.tripType;const d=S.days.length;
+  if(d>0)tips.push(`Per ${d} giorni: ${Math.ceil(d*0.7)} outfit bastano, punta su capi versatili`);
+  if(t==='mare')tips.push('Mare: porta 2 costumi, uno si asciuga mentre indossi l\'altro');
+  if(t==='lavoro')tips.push('Lavoro: outfit eleganti per i meeting, almeno uno casual per la sera');
+  if(t==='montagna')tips.push('Montagna: tecnica a cipolla, strati leggeri sovrapposti');
+  if(t==='city')tips.push('City break: max 2 paia di scarpe, priorità al comfort');
+  if(d>=6)tips.push('Viaggio lungo: capi lavabili in hotel per alleggerire la valigia');
+  if(!tips.length)tips.push('Inserisci le date e la destinazione per ricevere consigli');
+  document.getElementById('tips').innerHTML=tips.map(t=>`<div class="tip"><span class="tip-dot">→</span><span>${t}</span></div>`).join('');
+}
+
+/* ---- MATCH / GUARDAROBA ---- */
+function getAllOutfits(){
+  const list=[];
+  S.days.forEach((day,i)=>{
+    day.outfits.forEach((o,j)=>{
+      const k=`${i}_${j}`;
+      const photos=S.photos[k]||[];
+      list.push({name:o.name,type:o.type,day:day.label,dayIdx:i,outIdx:j,photo:photos[0]||null,key:k});
+    });
+  });
+  return list;
+}
+
+function renderMatch(){
+  if(!S.matchSelected)S.matchSelected=[];
+  if(!S.savedMatches)S.savedMatches=[];
+  renderWardrobeGrid();
+  renderMatchBoard();
+  renderSavedMatches();
+}
+
+function renderWardrobeGrid(){
+  const all=getAllOutfits();
+  const grid=document.getElementById('wardrobe-grid');
+  const cnt=document.getElementById('wardrobe-count');
+  cnt.textContent=all.length+' capi';
+  if(!all.length){
+    grid.innerHTML='<div class="wcard-empty" style="grid-column:1/-1;padding:24px;aspect-ratio:auto"><span style="font-size:28px">👗</span>Aggiungi outfit nel tab Outfit per vedere il guardaroba</div>';
+    return;
+  }
+  grid.innerHTML=all.map((o,i)=>{
+    const isSel=S.matchSelected.some(x=>x.key===o.key);
+    return`<div class="wcard ${isSel?'sel':''}" onclick="toggleMatchSel(${i})">
+      ${o.photo
+        ?`<img src="${o.photo}" alt="${o.name}"/>`
+        :`<div class="wcard-no-photo"><span>👗</span><span>${TL[o.type]||''}</span></div>`}
+      <div class="wcard-label">
+        <div class="wcard-name">${o.name}</div>
+        <div class="wcard-day">${o.day.split('·')[0].trim()}</div>
+      </div>
+      ${isSel?'<div class="wcard-sel-badge">✓</div>':''}
+    </div>`;
+  }).join('');
+}
+
+function toggleMatchSel(idx){
+  if(!S.matchSelected)S.matchSelected=[];
+  const all=getAllOutfits();
+  const o=all[idx];
+  const exists=S.matchSelected.findIndex(x=>x.key===o.key);
+  if(exists>=0) S.matchSelected.splice(exists,1);
+  else S.matchSelected.push(o);
+  renderWardrobeGrid();
+  renderMatchBoard();
+}
+
+function renderMatchBoard(){
+  const board=document.getElementById('match-board');
+  const slots=document.getElementById('match-slots');
+  if(!S.matchSelected||!S.matchSelected.length){
+    board.style.display='none';
+    return;
+  }
+  board.style.display='block';
+  slots.innerHTML=S.matchSelected.map((o,i)=>`
+    <div class="mslot">
+      ${o.photo?`<img src="${o.photo}" alt="${o.name}"/>`:`<div style="width:100%;height:100%;background:var(--card3);display:flex;align-items:center;justify-content:center;font-size:24px">👗</div>`}
+      <div class="mslot-label">${o.name}</div>
+      <button class="mslot-del" onclick="removeFromMatch(${i})">×</button>
+    </div>`).join('');
+}
+
+function removeFromMatch(i){
+  S.matchSelected.splice(i,1);
+  renderWardrobeGrid();
+  renderMatchBoard();
+}
+
+function clearMatch(){
+  S.matchSelected=[];
+  renderWardrobeGrid();
+  renderMatchBoard();
+}
+
+function saveMatch(){
+  if(!S.matchSelected||!S.matchSelected.length){toast('Seleziona almeno un capo!');return;}
+  const name=document.getElementById('match-name').value.trim()||('Look '+(S.savedMatches.length+1));
+  S.savedMatches.push({name,items:[...S.matchSelected],date:new Date().toLocaleDateString('it-IT')});
+  S.matchSelected=[];
+  document.getElementById('match-name').value='';
+  save();
+  renderWardrobeGrid();
+  renderMatchBoard();
+  renderSavedMatches();
+  toast('Look salvato! 💖');
+}
+
+function deleteMatch(i){
+  S.savedMatches.splice(i,1);
+  save();
+  renderSavedMatches();
+}
+
+function renderSavedMatches(){
+  const cont=document.getElementById('saved-matches');
+  if(!S.savedMatches||!S.savedMatches.length){cont.innerHTML='';return;}
+  cont.innerHTML=`<div class="card" style="border-color:rgba(167,139,250,0.2)">
+    <div class="card-title ch-violet">💜 Look salvati <span class="sbadge sbv" style="margin-left:auto">${S.savedMatches.length}</span></div>
+    ${S.savedMatches.map((m,i)=>`
+      <div class="smatch">
+        <div class="smatch-title">
+          <span>${m.name}</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:11px;color:var(--text3)">${m.date||''}</span>
+            <button class="bdel" onclick="deleteMatch(${i})">×</button>
+          </div>
+        </div>
+        <div class="smatch-photos">
+          ${m.items.map(o=>o.photo
+            ?`<img class="smatch-ph" src="${o.photo}" alt="${o.name}" title="${o.name}"/>`
+            :`<div class="smatch-noph" title="${o.name}">👗</div>`
+          ).join('')}
+        </div>
+        <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">
+          ${m.items.map(o=>`<span class="tag tn" style="font-size:10px">${o.name}</span>`).join('')}
+        </div>
+      </div>`).join('')}
+  </div>`;
+}
+
+/* ---- METEO ---- */
+const WMO={
+  0:{d:'Cielo sereno',i:'☀️'},1:{d:'Prevalentemente sereno',i:'🌤'},2:{d:'Parzialmente nuvoloso',i:'⛅'},3:{d:'Nuvoloso',i:'☁️'},
+  45:{d:'Nebbia',i:'🌫'},48:{d:'Nebbia con brina',i:'🌫'},
+  51:{d:'Pioggerella leggera',i:'🌦'},53:{d:'Pioggerella',i:'🌦'},55:{d:'Pioggerella intensa',i:'🌧'},
+  61:{d:'Pioggia leggera',i:'🌧'},63:{d:'Pioggia',i:'🌧'},65:{d:'Pioggia intensa',i:'🌧'},
+  71:{d:'Neve leggera',i:'🌨'},73:{d:'Neve',i:'❄️'},75:{d:'Neve intensa',i:'❄️'},
+  77:{d:'Granelli di neve',i:'🌨'},
+  80:{d:'Rovesci leggeri',i:'🌦'},81:{d:'Rovesci',i:'🌧'},82:{d:'Rovesci forti',i:'⛈'},
+  85:{d:'Rovesci di neve',i:'🌨'},86:{d:'Forti rovesci di neve',i:'❄️'},
+  95:{d:'Temporale',i:'⛈'},96:{d:'Temporale con grandine',i:'⛈'},99:{d:'Temporale forte',i:'⛈'}
+};
+
+function wmo(code){return WMO[code]||{d:'—',i:'🌡'};}
+
+async function searchMeteo(){
+  const input=document.getElementById('meteo-city-input');
+  const city=(input.value||S.dest||'').trim();
+  if(!city){toast('Inserisci una città!');return;}
+  showMeteoLoading(city);
+  try{
+    // Geocoding via Nominatim
+    const geoRes=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`,{headers:{'Accept-Language':'it'}});
+    const geoData=await geoRes.json();
+    if(!geoData||!geoData.length){showMeteoError('Città non trovata. Prova con un nome diverso.');return;}
+    const {lat,lon,display_name}=geoData[0];
+    const cityName=display_name.split(',')[0];
+
+    // Date range: use trip dates if available, else 7 days from today
+    let startDate,endDate,daysCount;
+    const today=new Date();
+    if(S.startDate&&S.endDate){
+      startDate=S.startDate;
+      endDate=S.endDate;
+      daysCount=Math.round((new Date(endDate)-new Date(startDate))/864e5)+1;
+    } else {
+      startDate=today.toISOString().split('T')[0];
+      const end=new Date(today);end.setDate(today.getDate()+6);
+      endDate=end.toISOString().split('T')[0];
+      daysCount=7;
+    }
+
+    // Clamp to 16 days (Open-Meteo forecast limit)
+    const maxEnd=new Date(today);maxEnd.setDate(today.getDate()+15);
+    const clampedEnd=new Date(endDate)>maxEnd?maxEnd.toISOString().split('T')[0]:endDate;
+
+    // Fetch weather
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,uv_index_max&timezone=auto&start_date=${startDate}&end_date=${clampedEnd}`;
+    const wRes=await fetch(url);
+    const wData=await wRes.json();
+
+    if(!wData.daily){showMeteoError('Errore nel recupero dati meteo. Riprova.');return;}
+
+    S.meteoData=wData;
+    S.meteoCityName=cityName;
+    renderMeteoFull(wData,cityName);
+  } catch(e){
+    showMeteoError('Connessione non disponibile. Verifica la connessione internet.');
+  }
+}
+
+function showMeteoLoading(city){
+  document.getElementById('meteo-content').innerHTML=`
+    <div class="meteo-loading">
+      <span class="meteo-loading-icon">⟳</span>
+      Recupero previsioni per <strong style="color:var(--text)">${city}</strong>...
+    </div>`;
+}
+
+function showMeteoError(msg){
+  document.getElementById('meteo-content').innerHTML=`<div class="meteo-error">⚠️ ${msg}</div>`;
+}
+
+function renderMeteoFull(data,cityName){
+  const d=data.daily;
+  const days=d.time;
+  const codes=d.weathercode;
+  const tmax=d.temperature_2m_max;
+  const tmin=d.temperature_2m_min;
+  const prec=d.precipitation_sum;
+  const wind=d.windspeed_10m_max;
+  const uv=d.uv_index_max;
+
+  // Hero: first day
+  const w0=wmo(codes[0]);
+  const avgMaxTemp=Math.round(tmax.reduce((a,b)=>a+b,0)/tmax.length);
+  const avgMinTemp=Math.round(tmin.reduce((a,b)=>a+b,0)/tmin.length);
+  const totalPrec=prec.reduce((a,b)=>a+(b||0),0).toFixed(0);
+  const maxUV=Math.max(...uv.filter(x=>x!=null));
+  const maxWind=Math.max(...wind.filter(x=>x!=null));
+
+  // Hero background based on weather
+  const heroGrad=codes[0]<=2?'linear-gradient(135deg,#0ea5e9,#38bdf8,#7dd3fc)':
+    codes[0]<=48?'linear-gradient(135deg,#64748b,#94a3b8)':
+    codes[0]<=67?'linear-gradient(135deg,#1d4ed8,#3b82f6)':
+    codes[0]<=77?'linear-gradient(135deg,#93c5fd,#bfdbfe)':
+    'linear-gradient(135deg,#475569,#64748b)';
+
+  // Clothes tips based on avg temp and conditions
+  const tips=generateMeteoTips(avgMaxTemp,avgMinTemp,totalPrec,maxWind,maxUV,codes);
+
+  // Date range label
+  const dateRange=S.startDate&&S.endDate
+    ?`${fmtMeteoDate(days[0])} — ${fmtMeteoDate(days[days.length-1])}`
+    :'Prossimi giorni';
+
+  const daysHTML=days.map((date,i)=>{
+    const w=wmo(codes[i]);
+    const dn=fmtMeteoDay(date,i);
+    const isToday=date===new Date().toISOString().split('T')[0];
+    const pLine=prec[i]>0?`<div class="meteo-day-prec">💧 ${prec[i].toFixed(1)} mm</div>`:'';
+    return`<div class="meteo-day-row ${isToday?'today':''}">
+      <div class="meteo-day-label">${dn}</div>
+      <div class="meteo-day-icon">${w.i}</div>
+      <div class="meteo-day-desc">${w.d}${pLine}</div>
+      <div class="meteo-day-temps">
+        <div class="meteo-day-max">${Math.round(tmax[i])}°</div>
+        <div class="meteo-day-min">${Math.round(tmin[i])}°</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('meteo-content').innerHTML=`
+    <div class="meteo-hero" style="background:${heroGrad}">
+      <div class="meteo-city">${cityName}</div>
+      <div class="meteo-dates">${dateRange}</div>
+      <span class="meteo-icon-big">${w0.i}</span>
+      <div class="meteo-temp-big">${Math.round(tmax[0])}°C</div>
+      <div class="meteo-desc">${w0.d}</div>
+      <div class="meteo-range">↑${Math.round(tmax[0])}° ↓${Math.round(tmin[0])}°</div>
+    </div>
+
+    <div class="meteo-extras">
+      <div class="meteo-extra">
+        <div class="meteo-extra-icon">💧</div>
+        <div class="meteo-extra-val">${totalPrec} mm</div>
+        <div class="meteo-extra-lbl">Pioggia tot.</div>
+      </div>
+      <div class="meteo-extra">
+        <div class="meteo-extra-icon">💨</div>
+        <div class="meteo-extra-val">${Math.round(maxWind)} km/h</div>
+        <div class="meteo-extra-lbl">Vento max</div>
+      </div>
+      <div class="meteo-extra">
+        <div class="meteo-extra-icon">☀️</div>
+        <div class="meteo-extra-val">UV ${Math.round(maxUV)}</div>
+        <div class="meteo-extra-lbl">${uvLabel(maxUV)}</div>
+      </div>
+    </div>
+
+    <div class="meteo-days">${daysHTML}</div>
+
+    <div class="meteo-tips">
+      <div class="card-title ch-mint" style="margin-bottom:10px">🧳 Cosa mettere in valigia</div>
+      ${tips.map(t=>`<div class="meteo-tip"><span class="meteo-tip-icon">${t.icon}</span><span>${t.text}</span></div>`).join('')}
+    </div>
+
+    <button class="gen-btn" style="margin-top:0" onclick="document.getElementById('meteo-city-input').value='';document.getElementById('meteo-content').innerHTML=document.getElementById('meteo-idle')?document.getElementById('meteo-idle').outerHTML:'';S.meteoData=null;renderMeteoIdle()">🔄 Cerca un'altra città</button>`;
+}
+
+function renderMeteoIdle(){
+  document.getElementById('meteo-content').innerHTML=`<div class="meteo-loading" id="meteo-idle"><span style="font-size:40px;display:block;margin-bottom:10px">🌤</span>Inserisci la tua destinazione<br>per vedere le previsioni del viaggio</div>`;
+}
+
+function fmtMeteoDate(dateStr){
+  const d=new Date(dateStr+'T12:00:00');
+  const mn=['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+  return`${d.getDate()} ${mn[d.getMonth()]}`;
+}
+
+function fmtMeteoDay(dateStr,i){
+  const d=new Date(dateStr+'T12:00:00');
+  const today=new Date();today.setHours(12,0,0,0);
+  const diff=Math.round((d-today)/864e5);
+  if(diff===0)return'Oggi';
+  if(diff===1)return'Domani';
+  const dw=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'];
+  return dw[d.getDay()]+' '+d.getDate();
+}
+
+function uvLabel(uv){if(uv<3)return'Basso';if(uv<6)return'Moderato';if(uv<8)return'Alto';if(uv<11)return'Molto alto';return'Estremo';}
+
+function generateMeteoTips(avgMax,avgMin,totalPrec,maxWind,maxUV,codes){
+  const tips=[];
+  const hasRain=totalPrec>10||codes.some(c=>c>=51&&c<=82);
+  const hasStorm=codes.some(c=>c>=95);
+  const hasSnow=codes.some(c=>c>=71&&c<=77);
+  const isHot=avgMax>=28;
+  const isWarm=avgMax>=22&&avgMax<28;
+  const isMild=avgMax>=14&&avgMax<22;
+  const isCold=avgMax<14;
+  const isFreezing=avgMin<0;
+  const isWindy=maxWind>40;
+  const highUV=maxUV>=6;
+
+  if(isHot) tips.push({icon:'👗',text:`Temperature fino a ${Math.round(avgMax)}°C — abiti leggeri, lino o cotone, colori chiari`});
+  else if(isWarm) tips.push({icon:'👕',text:`Clima mite (${Math.round(avgMax)}°C) — t-shirt e leggeri, una felpa per la sera`});
+  else if(isMild) tips.push({icon:'🧥',text:`Temperature fresche (${Math.round(avgMax)}°C) — giacca leggera o cardigan essenziali`});
+  else if(isCold) tips.push({icon:'🧤',text:`Fa freddo! (${Math.round(avgMax)}°C) — cappotto, maglioni e strati sovrapposti`});
+
+  if(isFreezing) tips.push({icon:'🧣',text:'Temperature sotto zero di notte — sciarpa, guanti e cappello obbligatori'});
+  if(hasRain) tips.push({icon:'☂️',text:'Prevista pioggia — aggiungi un impermeabile leggero o un ombrello tascabile'});
+  if(hasStorm) tips.push({icon:'⛈',text:'Possibili temporali — evita escursioni aperte nelle ore centrali, porta impermeabile'});
+  if(hasSnow) tips.push({icon:'🥾',text:'Nevicate previste — scarpe impermeabili con suola antiscivolo indispensabili'});
+  if(isWindy) tips.push({icon:'💨',text:`Vento fino a ${Math.round(maxWind)} km/h — evita abiti larghi, porta un giubbotto antivento`});
+  if(highUV) tips.push({icon:'🧴',text:`Indice UV ${Math.round(maxUV)} (${uvLabel(maxUV)}) — crema solare alta protezione, cappello e occhiali`});
+  if(isHot&&highUV) tips.push({icon:'🕶',text:'Caldo e sole intenso — occhiali da sole polarizzati, borraccia sempre con te'});
+
+  if(!tips.length) tips.push({icon:'✅',text:'Meteo nella norma — segui la lista outfit che hai già pianificato'});
+  return tips;
+}
+
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('ib').classList.add('show');});
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('ib').classList.remove('show');});}}
+
+function restoreUI(){
+  if(S.dest)document.getElementById('dest').value=S.dest;
+  if(S.tripType)document.getElementById('tripType').value=S.tripType;
+  if(S.startDate)document.getElementById('sd').value=S.startDate;
+  if(S.endDate)document.getElementById('ed').value=S.endDate;
+  if(S.days.length){const diff=S.days.length;document.getElementById('dcount').textContent=diff+(diff===1?' giorno':' giorni');document.getElementById('sgrid').style.display='grid';renderDays();updateStats();}
+  updateHdr();updateTips();renderSec('notte');renderSec('bagno');renderNec();
+}
+
+load();restoreUI();
+setTimeout(()=>document.getElementById('splash').classList.add('hide'),1400);
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
